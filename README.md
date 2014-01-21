@@ -3,6 +3,12 @@
 
 This is a repository for source code of Jim Wendler's "5/3/1" strength program planning web application.
 
+I was tired of spending too much time on the calculations of my mesocycle using my calculator and excel. 
+So I built this extension that helped me planning out my '5/3/1' mesocycles. 
+
+You may use it or not - I don't give a fuck.
+You may contribute to it or not - I don't give a fuck.
+
 Application is built using: 
   - ASP.NET MVC 5 - http://www.asp.net/vnext/overview/aspnet-mvc
   - Angular JS - http://angularjs.org/,

@@ -3,7 +3,7 @@
   "name": "5/3/1 mesocycle planner",
   "version": "1.0",
 
-  "description": "This extension will help you plan your 5/3/1 mesocycle.",
+  "description": "I was tired of spending too much time on the calculations of my mesocycle using my calculator and excel. So I built this extension that helped me planning out my '5/3/1' mesocycles. You may use it or not - I don't give a fuck.",
   
   "browser_action": {
     "default_icon": "Design/Images/Logo.png",
