@@ -1,13 +1,14 @@
 {
   "manifest_version": 2,
-  "name": "5/3/1 mesocycle planner",
+  "name": "5/3/1 planner",
   "version": "1.0",
 
-  "description": "I was tired of spending too much time on the calculations of my mesocycle using my calculator and excel. So I built this extension that helped me planning out my '5/3/1' mesocycles. You may use it or not - I don't give a fuck.",
+  "short_name": "5/3/1 planner",
+  "description": "This extension helps me planning out my '5/3/1' mesocycles. You may use it or not - I don't give a fuck.",
   
   "browser_action": {
     "default_icon": "Design/Images/Logo.png",
-    "default_title": "5/3/1 mesocycle planner"
+    "default_title": "5/3/1 planner"
   },
   
   "background": {
