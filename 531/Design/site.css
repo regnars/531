@@ -1,0 +1,87 @@
+﻿#header {
+    background: url('Images/icon_128.png') no-repeat;
+    margin-left: 15px;
+    height: 54px;
+}
+
+.main-lift {
+    padding-bottom: 15px;
+}
+
+.page-break {
+    page-break-after: always;
+}
+
+    .page-break:last-child {
+        page-break-after: auto;
+    }
+
+.cycle {
+    page-break-inside: avoid;
+}
+
+.availablePlate {
+    float: left;
+}
+
+.barbellWeight {
+    padding-top: 15px;
+    clear: both;
+}
+
+.accessory-excercise {
+    padding: 10px 0;
+}
+
+.accessory-work-template {
+    padding-bottom: 15px;
+}
+
+.cycle, .set {
+    padding: 0 0 15px 30px;
+}
+
+.plates {
+    padding-left: 90px;
+}
+
+.calc-plate {
+    padding: 3px;
+}
+
+.calc-button {
+    float: right;
+    margin-left: 2px;
+}
+
+.plateCount {
+    font-weight: bold;
+}
+
+.plateUsedForCalculation, .button-clickable {
+    color: lime !important;
+}
+
+.plateNotUsedForCalculation, .button-unclickable {
+    color: crimson !important;
+}
+
+.strike {
+    text-decoration: line-through;
+}
+
+/*bootstrap overrides*/
+
+.input-group {
+    padding-bottom: 3px;
+}
+
+.page-header {
+    margin-top: 0 !important;
+    height: 55px !important;
+}
+
+/*angular overrides*/
+.ng-invalid {
+    box-shadow: 0 0 7px crimson !important;
+}

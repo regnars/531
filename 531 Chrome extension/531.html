@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>5/3/1 planner</title>
+    <script src="Scripts/Angular/angular.min.js"></script>
+    <script src="Scripts/AngularLocalStorage/angular-local-storage.min.js"></script>
+    <script src="Scripts/JQuery/jquery-2.0.3.min.js"></script>
+    <script src="Design/Bootstrap/js/bootstrap.min.js"></script>
+    <script src="Scripts/IdentifierGenerator.js"></script>
+    <script src="Scripts/Controllers/531Controller.js"></script>
+    <link rel="stylesheet" href="Design/site.css" />
+    <link rel="stylesheet" href="Design/Bootstrap/css/bootstrap.min.css" />
+    <link rel="shortcut icon" href="favicon.ico" />
+</head>
+<body>
+    <div class="page-header">
+        <div id="header"></div>
+    </div>
+    <div>
+        <div ng-app="fiveThreeOneModule" ng-controller="fiveThreeOneController" ng-init="loadFromStorage()">
+
+            <form name="calculationForm">
+                <div ng-hide="calculated">
+                    <div class="main-lift col-lg-6" ng-repeat="mainLift in mainLifts">
+                        <div class="input-group">
+                            <span class="label label-default">{{mainLift.name}}</span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">Max reps</span>
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxReps" ng-change="saveDataToLocalStorage()" />
+                            <span class="input-group-addon">Max weight on reps</span>
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxWeight" ng-change="saveDataToLocalStorage()" />
+                            <span class="input-group-addon">kg</span>
+                            <span class="input-group-addon">Estimated 1RM </span>
+                            <span class="input-group-addon">{{calculateEstimatedOneRepMax(mainLift)}}</span>
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">1RM</span>
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.oneRepMax" required placeholder="Enter one rep max or copy estimated one rep max here..." ng-change="saveDataToLocalStorage()" />
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">90% of 1 RM </span>
+                            <span class="input-group-addon">{{calculateNinetyPercentOfOneRepMax(mainLift)}}</span>
+                            <span class="input-group-addon">kg</span>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Plates used in calculations</div>
+                            <div class="panel-body">
+                                <div class="col-sm-3" ng-repeat="availablePlate in availablePlates">
+                                    <span ng-class="{'label label-default strike': !availablePlate.usedForCalculations, 'label label-default': availablePlate.usedForCalculations}">{{availablePlate.weight}} kg</span>
+                                    <div class="calc-plate btn-group btn-group-vertical btn-group-xs">
+                                        <button type="button" ng-class="{'btn btn-default btn-sm plateUsedForCalculation': availablePlate.usedForCalculations, 'btn btn-default btn-sm': !availablePlate.usedForCalculations}" ng-click="addPlateToCalculation(availablePlate)" ng-disabled="availablePlate.usedForCalculations">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <button type="button" ng-class="{'btn btn-default btn-sm plateNotUsedForCalculation': !availablePlate.usedForCalculations, 'btn btn-default btn-sm': availablePlate.usedForCalculations}" ng-click="removePlateFromCalculation(availablePlate)" ng-disabled="!availablePlate.usedForCalculations">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <button type="button" class="calc-button btn btn-default btn-lg"
+                                        ng-click="calculateMesocycle()" ng-disabled="calculationForm.$invalid || !atLeastOnePlateCanBeUsedForCalculations()">
+                                    <span ng-class="{'glyphicon glyphicon-repeat button-clickable': calculationForm.$valid && atLeastOnePlateCanBeUsedForCalculations(), 'glyphicon glyphicon-repeat button-unclickable': calculationForm.$invalid || !atLeastOnePlateCanBeUsedForCalculations()}">
+                                    </span> Calculate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div ng-show="calculated">
+                <div class="panel panel-default">
+                    <div class="panel panel-heading">
+                        <button type="button" class="btn btn-default btn-lg" ng-click="recalculateMesocycle()" ng-hide="printableVersion">
+                            <span class=" glyphicon glyphicon-refresh button-clickable">
+                            </span> Change data
+                        </button>
+                        <span ng-class="{'label label-default strike': !printableVersion, 'label label-default': printableVersion}">Printable version</span>
+                        <div class="calc-plate btn-group btn-group-vertical btn-group-xs">
+                            <button type="button" ng-class="{'btn btn-default btn-sm plateUsedForCalculation': printableVersion, 'btn btn-default btn-sm': !printableVersion}" ng-click="enablePrintableVersion()" ng-disabled="printableVersion">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button type="button" ng-class="{'btn btn-default btn-sm plateNotUsedForCalculation': !printableVersion, 'btn btn-default btn-sm': printableVersion}" ng-click="disablePrintableVersion(availablePlate)" ng-disabled="!printableVersion">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                        <button type="button" class="btn btn-default btn-lg" ng-click="printPage()" ng-show="printableVersion">
+                            <span class=" glyphicon glyphicon-print button-clickable">
+                            </span> Print
+                        </button>
+                    </div>
+                    <div class="panel panel-body">
+                        <div class="accessory-work-template col-lg-12">
+                            <div class="input-group" ng-hide="printableVersion">
+                                <span class="input-group-addon">Accessory work template</span>
+                                <div class="form-control">
+                                    <p ng-repeat="template in accessoryWorkPlanTemplates">
+                                        <input type="radio" ng-model="$parent.selectedAccessoryWorkTemplate" value="{{template}}" ng-change="$parent.loadAccessoryWorkTemplate()"> {{template}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page-break col-lg-3" ng-repeat="mainLift in mainLifts">
+                            <span class="label label-default">{{mainLift.name}}</span>
+                            <button type="button" class="btn btn-default btn-xs" ng-click="addAccessoryWorkExcercise(mainLift)" ng-hide="printableVersion">
+                                <span class=" glyphicon glyphicon-plus button-clickable">
+                                </span> Add accessory work excercise
+                            </button>
+                            <div class="accessory-excercise" ng-repeat="accessoryWorkExcercise in mainLift.accessoryWorkExcercises">
+                                <div class="input-group">
+                                    <span class="input-group-addon">Acc. exc.</span>
+                                    <input class="form-control" type="text" ng-model="accessoryWorkExcercise.name" ng-change="saveDataToLocalStorage()" />
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Sets</span>
+                                    <input class="form-control" type="number" min="1" max="20" ng-model="accessoryWorkExcercise.sets" ng-change="saveDataToLocalStorage()" />
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon">Reps</span>
+                                    <input class="form-control" type="number" min="1" max="20" ng-model="accessoryWorkExcercise.reps" ng-change="saveDataToLocalStorage()" />
+                                </div>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="removeAccessoryWorkExcercise(mainLift, accessoryWorkExcercise)" ng-hide="printableVersion">
+                                    <span class=" glyphicon glyphicon-minus button-clickable">
+                                    </span> Remove accessory work excercise
+                                </button>
+                            </div>
+                            <div class="cycle" ng-repeat="cycleWeight in mainLift.cycleWeights">
+                                <span class="label label-primary">Cycle - {{cycleWeight.cycle}}</span>
+                                <div class="set" ng-repeat="setWeight in cycleWeight.setWeights">
+                                    <span class="label label-success">Set {{setWeight.set}}</span>
+                                    <span class="label label-danger">{{setWeight.weight.weightToUse}} kg</span>
+                                    x
+                                    <span class="label label-danger">{{setWeight.reps}} <span ng-show="setWeight.canDoMoreReps">+</span> reps</span>
+
+                                    <span class="label label-info">Calculated weight - {{setWeight.weight.rawWeight}} kg</span>
+                                    <span class="label label-warning">{{setWeight.percentages}} % from 90% of 1RM </span>
+                                    <div class="plates">
+                                        <span ng-show="{{setWeight.weight.platesVisible}}" class="label label-default">Plates:</span>
+                                        <div ng-repeat="plateToUse in setWeight.weight.platesToUse">
+                                            <span class="plateCount">{{plateToUse.plateCount}}</span>
+                                            x <span class="badge">{{plateToUse.plateWeight}} kg</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

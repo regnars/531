@@ -1,0 +1,38 @@
+{
+  "manifest_version": 2,
+  "name": "5/3/1 mesocycle planner",
+  "version": "1.0",
+
+  "description": "This extension will help you plan your 5/3/1 mesocycle.",
+  
+  "browser_action": {
+    "default_icon": "Design/Images/Logo.png",
+    "default_title": "5/3/1 mesocycle planner"
+  },
+  
+  "background": {
+    "scripts": ["background.js"]
+  },
+  
+  "icons": { 
+		"16": "Design/Images/icon_16.png",
+        "48": "Design/Images/icon_48.png",
+        "128": "Design/Images/icon_128.png" 
+  },
+    
+  "author": "Regnārs Breikšs",
+  "homepage_url": "https://github.com/regnars/531/",
+    
+  "permissions": [
+	"tabs",
+	"storage"
+  ],
+  
+  "sandbox": {
+    "pages": [
+      "531.html"
+    ],
+    "content_security_policy":
+        "sandbox allow-scripts"
+  }
+}
