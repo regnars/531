@@ -56,6 +56,7 @@
            $scope.mainLifts = [
                        {
                            name: 'Military press',
+                           shouldEstimateOneRepMax: false,
                            maxReps: null,
                            maxWeight: null,
                            oneRepMax: null,
@@ -116,6 +117,7 @@
                        },
                        {
                            name: 'Deadlift',
+                           shouldEstimateOneRepMax: false,
                            maxReps: null,
                            maxWeight: null,
                            oneRepMax: null,
@@ -176,6 +178,7 @@
                        },
                        {
                            name: 'Bench press',
+                           shouldEstimateOneRepMax: false,
                            maxReps: null,
                            maxWeight: null,
                            oneRepMax: null,
@@ -236,6 +239,7 @@
                        },
                        {
                            name: 'Back squat',
+                           shouldEstimateOneRepMax: false,
                            maxReps: null,
                            maxWeight: null,
                            oneRepMax: null,
@@ -468,12 +472,13 @@
            ];
 
            $scope.calculateEstimatedOneRepMax = function (mainLift) {
-               var estimatedOneRepMax = 0;
+               var oneRepMax = 0;
                if (mainLift.maxReps != undefined
                    && mainLift.maxWeight != undefined) {
-                   estimatedOneRepMax = (mainLift.maxReps * mainLift.maxWeight * 0.0333 + mainLift.maxWeight).toFixed(1);
+                   oneRepMax = (mainLift.maxReps * mainLift.maxWeight * 0.0333 + mainLift.maxWeight).toFixed(1);
                }
-               return estimatedOneRepMax;
+               mainLift.oneRepMax = oneRepMax;
+               this.saveDataToLocalStorage();
            };
 
            $scope.calculateNinetyPercentOfOneRepMax = function (mainLift) {
@@ -481,6 +486,34 @@
                if (mainLift.oneRepMax != undefined)
                    mainLift.ninetyPercentOfOneRepMax = (mainLift.oneRepMax * 0.9).toFixed(1);
                return mainLift.ninetyPercentOfOneRepMax;
+           };
+
+           $scope.estimateOneRepMax = function (mainLift) {
+               mainLift.shouldEstimateOneRepMax = true;
+               mainLift.oneRepMax = null;
+               mainLift.ninetyPercentOfOneRepMax = null;
+               this.calculateEstimatedOneRepMax(mainLift);
+               this.saveDataToLocalStorage();
+           };
+
+           $scope.enterOneRepMax = function (mainLift) {
+               mainLift.shouldEstimateOneRepMax = false;
+               mainLift.oneRepMax = null;
+               mainLift.ninetyPercentOfOneRepMax = null;
+               this.saveDataToLocalStorage();
+           };
+
+           $scope.isFormValid = function () { //Conditional validation does not seem to work- all validators are valid but the form itself is not :(. This is a workaround.
+               return this.areAllMainLiftsValid()
+                      && this.atLeastOnePlateCanBeUsedForCalculations();
+           };
+
+           $scope.areAllMainLiftsValid = function () {
+               var invalidLifts = $.grep(this.mainLifts, function (item) {
+                   return item.ninetyPercentOfOneRepMax == null
+                       || (item.ninetyPercentOfOneRepMax != null && item.ninetyPercentOfOneRepMax <= 0);
+               });
+               return invalidLifts.length == 0;
            };
 
            $scope.recalculateMesocycle = function () {

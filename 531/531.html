@@ -28,18 +28,32 @@
                             <span class="label label-default">{{mainLift.name}}</span>
                         </div>
                         <div class="input-group">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="estimateOneRepMax(mainLift)">
+                                    <span class="glyphicon glyphicon-ok button-clickable" ng-show="mainLift.shouldEstimateOneRepMax">
+                                    </span> Estimate 1 rep max
+                                </button>
+                                <button type="button" class="btn btn-default"
+                                        ng-click="enterOneRepMax(mainLift)">
+                                    <span class="glyphicon glyphicon-ok button-clickable" ng-hide="mainLift.shouldEstimateOneRepMax">
+                                    </span> Enter 1 rep max
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group" ng-show="mainLift.shouldEstimateOneRepMax">
                             <span class="input-group-addon">Max reps</span>
-                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxReps" ng-change="saveDataToLocalStorage()" />
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxReps" ng-change="calculateEstimatedOneRepMax(mainLift)" ng-required="mainLift.shouldEstimateOneRepMax" />
                             <span class="input-group-addon">Max weight on reps</span>
-                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxWeight" ng-change="saveDataToLocalStorage()" />
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxWeight" ng-change="calculateEstimatedOneRepMax(mainLift)" ng-required="mainLift.shouldEstimateOneRepMax" />
                             <span class="input-group-addon">kg</span>
                             <span class="input-group-addon">Estimated 1RM </span>
-                            <span class="input-group-addon">{{calculateEstimatedOneRepMax(mainLift)}}</span>
+                            <span class="input-group-addon">{{mainLift.oneRepMax}}</span>
                             <span class="input-group-addon">kg</span>
                         </div>
-                        <div class="input-group">
+                        <div class="input-group" ng-hide="mainLift.shouldEstimateOneRepMax">
                             <span class="input-group-addon">1RM</span>
-                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.oneRepMax" required placeholder="Enter one rep max or copy estimated one rep max here..." ng-change="saveDataToLocalStorage()" />
+                            <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.oneRepMax" ng-required="!mainLift.shouldEstimateOneRepMax" placeholder="Enter one rep max" ng-change="saveDataToLocalStorage()" />
                             <span class="input-group-addon">kg</span>
                         </div>
                         <div class="input-group">
@@ -73,9 +87,9 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <button type="button" class="calc-button btn btn-default btn-lg"
-                                        ng-click="calculateMesocycle()" ng-disabled="calculationForm.$invalid || !atLeastOnePlateCanBeUsedForCalculations()">
-                                    <span ng-class="{'glyphicon glyphicon-repeat button-clickable': calculationForm.$valid && atLeastOnePlateCanBeUsedForCalculations(), 'glyphicon glyphicon-repeat button-unclickable': calculationForm.$invalid || !atLeastOnePlateCanBeUsedForCalculations()}">
-                                    </span> Calculate
+                                        ng-click="calculateMesocycle()" ng-disabled="!isFormValid()">
+                                    <span ng-class="{'glyphicon glyphicon-repeat button-clickable': isFormValid(), 'glyphicon glyphicon-repeat button-unclickable': !isFormValid()}">
+                                    </span> Calculate mesocycle
                                 </button>
                             </div>
                         </div>
@@ -163,6 +177,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 </html>
