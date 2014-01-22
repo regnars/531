@@ -8,7 +8,7 @@ So I built this application that helped me planning out my "5/3/1" mesocycles.
 You may use it or not - I don't give a fuck.
 You may contribute to it or not - I don't give a fuck. 
 
-Application is built using: 
+Application was built using: 
   - ASP.NET MVC 5 - http://www.asp.net/vnext/overview/aspnet-mvc
   - Angular JS - http://angularjs.org/,
   - Bootstrap - http://getbootstrap.com/,
