@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "5/3/1 planner",
-  "version": "1.1",
+  "version": "1.2",
 
   "short_name": "5/3/1 planner",
   "description": "This extension helps me planning out my '5/3/1' mesocycles. You may use it or not - I don't give a fuck.",
@@ -27,13 +27,5 @@
   "permissions": [
 	"tabs",
 	"storage"
-  ],
-  
-  "sandbox": {
-    "pages": [
-      "531.html"
-    ],
-    "content_security_policy":
-        "sandbox allow-scripts"
-  }
+  ]
 }

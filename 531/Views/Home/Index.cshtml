@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div ng-app="fiveThreeOneModule" ng-controller="fiveThreeOneController" ng-init="loadFromStorage()">
+<div ng-app="fiveThreeOneModule" ng-controller="fiveThreeOneController" ng-init="loadFromStorage()" ng-csp>
 
     <form name="calculationForm">
         <div ng-hide="calculated">

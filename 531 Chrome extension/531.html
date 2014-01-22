@@ -19,7 +19,7 @@
         <div id="header"></div>
     </div>
     <div>
-        <div ng-app="fiveThreeOneModule" ng-controller="fiveThreeOneController" ng-init="loadFromStorage()">
+        <div ng-app="fiveThreeOneModule" ng-controller="fiveThreeOneController" ng-init="loadFromStorage()" ng-csp>
 
             <form name="calculationForm">
                 <div ng-hide="calculated">
@@ -177,6 +177,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
 </body>

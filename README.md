@@ -16,7 +16,6 @@ Application is built using:
   - "5/3/1" 2nd edition book by Jim Wendler - http://store.jimwendler.com/ProductDetails.asp?ProductCode=5312edebook
 
 Chrome extension does not use asp.net MVC and uses plain html instead. 
-Local storage is not available for chrome extension because of the sandboxing -> dependancy on angular.
 You can download extension from Chrome web store here - https://chrome.google.com/webstore/detail/531-planner/aeaclelajhamgcmngdjlnpjjkggbcbbh
 
 Disclaimer:
