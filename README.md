@@ -17,6 +17,7 @@ Application is built using:
 
 Chrome extension does not use asp.net MVC and uses plain html instead. 
 Local storage is not available for chrome extension because of the sandboxing -> dependancy on angular.
+You can download extension from Chrome web store here - https://chrome.google.com/webstore/detail/531-planner/aeaclelajhamgcmngdjlnpjjkggbcbbh
 
 Disclaimer:
 I do not own "5/3/1" logo and the "5/3/1" program itself. All rights belong to their rightful owners.
