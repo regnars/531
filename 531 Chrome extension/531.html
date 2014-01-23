@@ -23,6 +23,16 @@
 
             <form name="calculationForm">
                 <div ng-hide="calculated">
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">Units of measurement</span>
+                            <div class="form-control">
+                                <p ng-repeat="measurementUnit in measurementUnits">
+                                    <input type="radio" ng-model="$parent.selectedMeasurementUnit" value="{{measurementUnit}}" ng-change="saveDataToLocalStorage()"> {{measurementUnit}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="main-lift col-lg-6" ng-repeat="mainLift in mainLifts">
                         <div class="input-group">
                             <span class="label label-default">{{mainLift.name}}</span>
@@ -46,20 +56,20 @@
                             <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxReps" ng-change="calculateEstimatedOneRepMax(mainLift)" ng-required="mainLift.shouldEstimateOneRepMax" />
                             <span class="input-group-addon">Max weight on reps</span>
                             <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.maxWeight" ng-change="calculateEstimatedOneRepMax(mainLift)" ng-required="mainLift.shouldEstimateOneRepMax" />
-                            <span class="input-group-addon">kg</span>
+                            <span class="input-group-addon">{{selectedMeasurementUnit}}</span>
                             <span class="input-group-addon">Estimated 1RM </span>
                             <span class="input-group-addon">{{mainLift.oneRepMax}}</span>
-                            <span class="input-group-addon">kg</span>
+                            <span class="input-group-addon">{{selectedMeasurementUnit}}</span>
                         </div>
                         <div class="input-group" ng-hide="mainLift.shouldEstimateOneRepMax">
                             <span class="input-group-addon">1RM</span>
                             <input class="form-control" type="number" min="1" max="1000" ng-model="mainLift.oneRepMax" ng-required="!mainLift.shouldEstimateOneRepMax" placeholder="Enter one rep max" ng-change="saveDataToLocalStorage()" />
-                            <span class="input-group-addon">kg</span>
+                            <span class="input-group-addon">{{selectedMeasurementUnit}}</span>
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">90% of 1 RM </span>
                             <span class="input-group-addon">{{calculateNinetyPercentOfOneRepMax(mainLift)}}</span>
-                            <span class="input-group-addon">kg</span>
+                            <span class="input-group-addon">{{selectedMeasurementUnit}}</span>
                         </div>
                     </div>
 
@@ -68,8 +78,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">Plates used in calculations</div>
                             <div class="panel-body">
-                                <div class="col-sm-3" ng-repeat="availablePlate in availablePlates">
-                                    <span ng-class="{'label label-default strike': !availablePlate.usedForCalculations, 'label label-default': availablePlate.usedForCalculations}">{{availablePlate.weight}} kg</span>
+                                <div class="col-sm-3" ng-repeat="availablePlate in getAvailablePlates()">
+                                    <span ng-class="{'label label-default strike': !availablePlate.usedForCalculations, 'label label-default': availablePlate.usedForCalculations}">{{availablePlate.weight}} {{availablePlate.measurementUnit}}</span>
                                     <div class="calc-plate btn-group btn-group-vertical btn-group-xs">
                                         <button type="button" ng-class="{'btn btn-default btn-sm plateUsedForCalculation': availablePlate.usedForCalculations, 'btn btn-default btn-sm': !availablePlate.usedForCalculations}" ng-click="addPlateToCalculation(availablePlate)" ng-disabled="availablePlate.usedForCalculations">
                                             <span class="glyphicon glyphicon-ok"></span>
@@ -157,17 +167,17 @@
                                 <span class="label label-primary">Cycle - {{cycleWeight.cycle}}</span>
                                 <div class="set" ng-repeat="setWeight in cycleWeight.setWeights">
                                     <span class="label label-success">Set {{setWeight.set}}</span>
-                                    <span class="label label-danger">{{setWeight.weight.weightToUse}} kg</span>
+                                    <span class="label label-danger">{{setWeight.weight.weightToUse}} {{selectedMeasurementUnit}}</span>
                                     x
                                     <span class="label label-danger">{{setWeight.reps}} <span ng-show="setWeight.canDoMoreReps">+</span> reps</span>
 
-                                    <span class="label label-info">Calculated weight - {{setWeight.weight.rawWeight}} kg</span>
+                                    <span class="label label-info">Calculated weight - {{setWeight.weight.rawWeight}} {{selectedMeasurementUnit}}</span>
                                     <span class="label label-warning">{{setWeight.percentages}} % from 90% of 1RM </span>
                                     <div class="plates">
                                         <span ng-show="{{setWeight.weight.platesVisible}}" class="label label-default">Plates:</span>
                                         <div ng-repeat="plateToUse in setWeight.weight.platesToUse">
                                             <span class="plateCount">{{plateToUse.plateCount}}</span>
-                                            x <span class="badge">{{plateToUse.plateWeight}} kg</span>
+                                            x <span class="badge">{{plateToUse.plateWeight}} {{selectedMeasurementUnit}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +187,6 @@
                 </div>
             </div>
         </div>
-
 
     </div>
 </body>

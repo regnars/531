@@ -3,12 +3,45 @@
       '$scope',
       'localStorageService',
        function ($scope, localStorageService) {
+           $scope.removeOutdatedDataFromLocalStorage = function () {
+               var storedPlates = this.storedPlates();
+               if (storedPlates != undefined
+                   && storedPlates[0].measurementUnit == undefined)
+                   localStorageService.remove('availablePlates');
+           };
+
+           $scope.measurementUnits = [
+               "kg",
+               "lbs"
+           ];
+
+           $scope.selectedMeasurementUnit = "kg";
+
+           $scope.oneKgInLbs = 2.2046226218487757;
+           $scope.oneLbInKg = 0.45359237;
+
+           $scope.getConversionConstant = function () {
+               var conversionConstant = 0;
+               if (this.selectedMeasurementUnit == "kg")
+                   conversionConstant = this.oneLbInKg;
+               else if (this.selectedMeasurementUnit == "lbs")
+                   conversionConstant = this.oneKgInLbs;
+               return conversionConstant;
+           };
+
            $scope.accessoryWorkPlanTemplates = [
                "Boring but big",
                "The Triumvirate",
                "I'm not doing Jack shit",
                "Bodyweight"
            ];
+
+           $scope.storedSelectedMeasurementUnit = function () {
+               var selectedMeasurementUnit = null;
+               if (localStorageService.isSupported)
+                   selectedMeasurementUnit = localStorageService.get('selectedMeasurementUnit');
+               return selectedMeasurementUnit;
+           };
 
            $scope.storedMainLifts = function () {
                var mainLifts = null;
@@ -36,10 +69,13 @@
                    localStorageService.add('mainLifts', this.mainLifts);
                    localStorageService.add('availablePlates', this.availablePlates);
                    localStorageService.add('selectedAccessoryWorkTemplate', this.selectedAccessoryWorkTemplate);
+                   localStorageService.add('selectedMeasurementUnit', this.selectedMeasurementUnit);
                }
            };
 
            $scope.loadFromStorage = function () {
+               this.removeOutdatedDataFromLocalStorage();
+
                var storedMainLifts = this.storedMainLifts();
                if (storedMainLifts != undefined)
                    this.mainLifts = storedMainLifts;
@@ -51,6 +87,10 @@
                var storedSelectedAccessoryWorkTemplate = this.storedSelectedAccessoryWorkTemplate();
                if (storedSelectedAccessoryWorkTemplate != undefined)
                    this.selectedAccessoryWorkTemplate = storedSelectedAccessoryWorkTemplate;
+
+               var storedSelectedMeasurementUnit = this.storedSelectedMeasurementUnit();
+               if (storedSelectedMeasurementUnit != undefined)
+                   this.selectedMeasurementUnit = storedSelectedMeasurementUnit;
            };
 
            $scope.mainLifts = [
@@ -342,43 +382,103 @@
                this.saveDataToLocalStorage();
            };
 
+           $scope.getAvailablePlates = function () {
+               var availablePlates = $.grep(this.availablePlates, function (item) {
+                   return item.measurementUnit == $scope.selectedMeasurementUnit;
+               });
+               return availablePlates;
+           };
+
            $scope.availablePlates = [
                {
                    weight: 50,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 25,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 20,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 15,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 10,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 5,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 2.5,
+                   measurementUnit: "kg",
                    usedForCalculations: true
                },
                {
                    weight: 1.25,
+                   measurementUnit: "kg",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 110,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 100,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 55,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 45,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 35,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 25,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 10,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 5,
+                   measurementUnit: "lbs",
+                   usedForCalculations: true
+               },
+               {
+                   weight: 2.5,
+                   measurementUnit: "lbs",
                    usedForCalculations: true
                }
            ];
 
            $scope.atLeastOnePlateCanBeUsedForCalculations = function () {
-               var platesUsedForCalculations = $.grep(this.availablePlates, function (item) {
+               var platesUsedForCalculations = $.grep(this.getAvailablePlates(), function (item) {
                    return item.usedForCalculations;
                });
 
@@ -396,7 +496,19 @@
                this.saveDataToLocalStorage();
            };
 
-           $scope.barbellWeight = 20;
+           $scope.barbellWeight = {
+               inKg: 20,
+               inLbs: 45,
+           };
+
+           $scope.getBarbellWeight = function () {
+               var weight = 0;
+               if (this.selectedMeasurementUnit == "kg")
+                   weight = this.barbellWeight.inKg;
+               else if (this.selectedMeasurementUnit == "lbs")
+                   weight = this.barbellWeight.inLbs;
+               return weight;
+           };
 
            $scope.calculated = false;
 
@@ -475,7 +587,7 @@
                var oneRepMax = 0;
                if (mainLift.maxReps != undefined
                    && mainLift.maxWeight != undefined) {
-                   oneRepMax = (mainLift.maxReps * mainLift.maxWeight * 0.0333 + mainLift.maxWeight).toFixed(1);
+                   oneRepMax = parseFloat(mainLift.maxReps * mainLift.maxWeight * 0.0333 + mainLift.maxWeight).toFixed(1);
                }
                mainLift.oneRepMax = oneRepMax;
                this.saveDataToLocalStorage();
@@ -484,7 +596,7 @@
            $scope.calculateNinetyPercentOfOneRepMax = function (mainLift) {
                mainLift.ninetyPercentOfOneRepMax = 0;
                if (mainLift.oneRepMax != undefined)
-                   mainLift.ninetyPercentOfOneRepMax = (mainLift.oneRepMax * 0.9).toFixed(1);
+                   mainLift.ninetyPercentOfOneRepMax = parseFloat(mainLift.oneRepMax * 0.9).toFixed(1);
                return mainLift.ninetyPercentOfOneRepMax;
            };
 
@@ -564,13 +676,15 @@
                    platesToUse: new Array()
                };
 
-               if (weight.rawWeight > this.barbellWeight)
-                   weight.weightToUse = this.barbellWeight;
+               var barbellWeight = this.getBarbellWeight();
+               if (weight.rawWeight > barbellWeight)
+                   weight.weightToUse = barbellWeight;
 
-               var rawWeightWithoutBarbell = weight.rawWeight - this.barbellWeight;
+               var rawWeightWithoutBarbell = weight.rawWeight - barbellWeight;
 
-               for (var availablePlateIndex = 0; availablePlateIndex < this.availablePlates.length; availablePlateIndex++) {
-                   var availablePlate = this.availablePlates[availablePlateIndex];
+               var availablePlates = this.getAvailablePlates();
+               for (var availablePlateIndex = 0; availablePlateIndex < availablePlates.length; availablePlateIndex++) {
+                   var availablePlate = availablePlates[availablePlateIndex];
                    if (availablePlate.usedForCalculations) {
                        var weightOnBothSides = 2 * availablePlate.weight;
                        do {
