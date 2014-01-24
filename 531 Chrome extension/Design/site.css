@@ -4,6 +4,12 @@
     height: 54px;
 }
 
+.jm-link {
+    float: right;
+    margin: 15px;
+    font-weight: bold;
+}
+
 .main-lift {
     padding-bottom: 15px;
 }
