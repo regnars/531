@@ -18,6 +18,7 @@
 
 .cycle {
     page-break-inside: avoid;
+    border-bottom: 1px solid #ddd;
 }
 
 .availablePlate {

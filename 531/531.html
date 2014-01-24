@@ -145,7 +145,7 @@
                                 <span class=" glyphicon glyphicon-plus button-clickable">
                                 </span> Add accessory work excercise
                             </button>
-                            <div class="accessory-excercise" ng-repeat="accessoryWorkExcercise in mainLift.accessoryWorkExcercises">
+                            <div class="accessory-excercise" ng-repeat="accessoryWorkExcercise in mainLift.accessoryWorkExcercises" ng-hide="printableVersion">
                                 <div class="input-group">
                                     <span class="input-group-addon">Acc. exc.</span>
                                     <input class="form-control" type="text" ng-model="accessoryWorkExcercise.name" ng-change="saveDataToLocalStorage()" />
@@ -181,12 +181,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="accessory-excercise" ng-repeat="accessoryWorkExcercise in mainLift.accessoryWorkExcercises" ng-show="printableVersion">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Acc. exc.</span>
+                                        <span class="input-group-addon">{{accessoryWorkExcercise.name}}</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Sets</span>
+                                        <span class="input-group-addon">{{accessoryWorkExcercise.sets}}</span>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Reps</span>
+                                        <span class="input-group-addon">{{accessoryWorkExcercise.reps}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 </body>
