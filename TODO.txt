@@ -1,0 +1,1 @@
+- Create "Discard my template changes" button.
