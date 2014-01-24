@@ -1,2 +1,2 @@
-- Create "Discard my template changes" button.
-- "Custom template" selection.
+- Link to Jim Wendler's e-book shop page.
+- Deload week.

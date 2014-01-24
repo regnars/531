@@ -8,6 +8,10 @@
                if (storedPlates != undefined
                    && storedPlates[0].measurementUnit == undefined)
                    localStorageService.remove('availablePlates');
+               var storedMainLifts = this.storedMainLifts();
+               if (storedMainLifts != undefined
+                   && this.accessoryWorkTemplatesHaveBeenChanged(storedMainLifts))
+                   this.fixAccessoryExcercisesInTheTemplate(storedMainLifts);
            };
 
            $scope.measurementUnits = [
@@ -17,16 +21,32 @@
 
            $scope.selectedMeasurementUnit = "kg";
 
-           $scope.oneKgInLbs = 2.2046226218487757;
-           $scope.oneLbInKg = 0.45359237;
+           $scope.fixAccessoryExcercisesInTheTemplate = function (storedMainLifts) {
+               for (var mainLiftIndex = 0; mainLiftIndex < storedMainLifts.length; mainLiftIndex++) {
+                   var mainLift = this.mainLifts[mainLiftIndex]
+                   var storedMainLift = storedMainLifts[mainLiftIndex];
+                   storedMainLift.accessoryWorkPlanTemplates = mainLift.accessoryWorkPlanTemplates;
+               }
+               this.mainLifts = storedMainLifts;
+               this.saveDataToLocalStorage();
+           };
 
-           $scope.getConversionConstant = function () {
-               var conversionConstant = 0;
-               if (this.selectedMeasurementUnit == "kg")
-                   conversionConstant = this.oneLbInKg;
-               else if (this.selectedMeasurementUnit == "lbs")
-                   conversionConstant = this.oneKgInLbs;
-               return conversionConstant;
+           $scope.accessoryWorkTemplatesHaveBeenChanged = function (storedMainLifts) {
+               for (var mainLiftIndex = 0; mainLiftIndex < this.mainLifts.length; mainLiftIndex++) {
+                   var mainLift = this.mainLifts[mainLiftIndex];
+                   var storedMainLift = storedMainLifts[mainLiftIndex];
+                   if (mainLift.accessoryWorkPlanTemplates.length != storedMainLift.accessoryWorkPlanTemplates.length)
+                       return true;
+                   else {
+                       for (var accessoryWorkTemplateIndex = 0; accessoryWorkTemplateIndex < mainLift.accessoryWorkPlanTemplates.length; accessoryWorkTemplateIndex++) {
+                           var accessoryWorkTemplate = mainLift.accessoryWorkPlanTemplates[accessoryWorkTemplateIndex];
+                           var storedAccessoryWorkTemplate = storedMainLift.accessoryWorkPlanTemplates[accessoryWorkTemplateIndex];
+                           if (JSON.stringify(accessoryWorkTemplate) !== JSON.stringify(storedAccessoryWorkTemplate))
+                               return true;
+                       }
+                   }
+               }
+               return false;
            };
 
            $scope.accessoryWorkPlanTemplates = [
@@ -349,7 +369,13 @@
                    var template = this.getAccessoryWorkTemplate(mainLift, this.selectedAccessoryWorkTemplate);
                    if (template.excercises != undefined)
                        for (var accessoryExcerciseIndex = 0; accessoryExcerciseIndex < template.excercises.length; accessoryExcerciseIndex++) {
-                           mainLift.accessoryWorkExcercises.push(template.excercises[accessoryExcerciseIndex]);
+                           var excercise = template.excercises[accessoryExcerciseIndex];
+                           var excerciseCopy = {
+                               name: excercise.name,
+                               sets: excercise.sets,
+                               reps: excercise.reps
+                           };
+                           mainLift.accessoryWorkExcercises.push(excerciseCopy);
                        }
                }
                this.saveDataToLocalStorage();
