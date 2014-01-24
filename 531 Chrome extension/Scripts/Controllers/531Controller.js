@@ -672,8 +672,10 @@
                    for (var mainLiftCycleIndex = 0; mainLiftCycleIndex < this.mainLiftCycles.length; mainLiftCycleIndex++) {
                        var mainLiftCycle = this.mainLiftCycles[mainLiftCycleIndex];
                        var mainLift = this.mainLifts[mainLiftIndex];
+                       var cycle = mainLiftCycleIndex + 1;
                        var cycleWeights = {
-                           cycle: mainLiftCycleIndex + 1,
+                           cycle: cycle,
+                           isDeload: cycle == 4,
                            setWeights: new Array()
                        };
                        for (var setIndex = 0; setIndex < mainLiftCycle.length; setIndex++) {

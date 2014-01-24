@@ -147,6 +147,7 @@
                     </div>
                     <div class="cycle" ng-repeat="cycleWeight in mainLift.cycleWeights">
                         <span class="label label-primary">Cycle - {{cycleWeight.cycle}}</span>
+                        <span class="label label-primary" ng-show="cycleWeight.isDeload">DELOAD</span>
                         <div class="set" ng-repeat="setWeight in cycleWeight.setWeights">
                             <span class="label label-success">Set {{setWeight.set}}</span>
                             <span class="label label-danger">{{setWeight.weight.weightToUse}} {{selectedMeasurementUnit}}</span>
@@ -170,11 +171,13 @@
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon">Sets</span>
-                                <span class="input-group-addon">{{accessoryWorkExcercise.sets}}</span>
+                                <span class="input-group-addon" ng-hide="cycleWeight.isDeload">{{accessoryWorkExcercise.sets}}</span>
+                                <span class="input-group-addon" ng-show="cycleWeight.isDeload">DELOAD</span>
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon">Reps</span>
-                                <span class="input-group-addon">{{accessoryWorkExcercise.reps}}</span>
+                                <span class="input-group-addon" ng-hide="cycleWeight.isDeload">{{accessoryWorkExcercise.reps}}</span>
+                                <span class="input-group-addon" ng-show="cycleWeight.isDeload">DELOAD</span>
                             </div>
                         </div>
                     </div>
