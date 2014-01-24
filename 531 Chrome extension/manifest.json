@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
   "name": "5/3/1 planner",
-  "version": "1.4",
+  "version": "1.5",
 
   "short_name": "5/3/1 planner",
-  "description": "This extension helps me planning out my '5/3/1' mesocycles. You may use it or not - I don't give a fuck.",
+  "description": "This extension helps me planning out my '5/3/1' mesocycles. Want a fucking manual - buy Jim's book.",
   
   "browser_action": {
     "default_icon": "Design/Images/Logo.png",
