@@ -122,7 +122,7 @@
                     </div>
                 </div>
                 <div class="page-break col-lg-3" ng-repeat="mainLift in mainLifts">
-                    <span class="label label-default">{{mainLift.name}}</span>
+                    <span class="label label-default" ng-hide="printableVersion">{{mainLift.name}}</span>
                     <button type="button" class="btn btn-default btn-xs" ng-click="addAccessoryWorkExcercise(mainLift)" ng-hide="printableVersion">
                         <span class=" glyphicon glyphicon-plus button-clickable">
                         </span> Add accessory work excercise
@@ -146,6 +146,7 @@
                         </button>
                     </div>
                     <div class="cycle" ng-repeat="cycleWeight in mainLift.cycleWeights">
+                        <span class="label label-default" ng-show="printableVersion">{{mainLift.name}}</span>
                         <span class="label label-primary">Cycle - {{cycleWeight.cycle}}</span>
                         <span class="label label-primary" ng-show="cycleWeight.isDeload">DELOAD</span>
                         <div class="set" ng-repeat="setWeight in cycleWeight.setWeights">
