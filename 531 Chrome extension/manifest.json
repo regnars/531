@@ -4,7 +4,7 @@
   "version": "1.9",
 
   "short_name": "5/3/1 planner",
-  "description": "This extension will help you planning your '5/3/1' mesocycles. If you would like a manual on how to use this you should buy Jim's e-book.",
+  "description": "This extension will help you planning your '5/3/1' mesocycles.",
   
   "browser_action": {
     "default_icon": "Design/Images/Logo.png",
