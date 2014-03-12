@@ -16,7 +16,7 @@ The extension was built using:
   - Angular local storage - https://github.com/grevory/angular-local-storage
   - "5/3/1" 2nd edition book by Jim Wendler - http://store.jimwendler.com/ProductDetails.asp?ProductCode=5312edebook
 
-You can download extension from Chrome web store - https://chrome.google.com/webstore/detail/531-planner/aeaclelajhamgcmngdjlnpjjkggbcbbh (currently unavailable)
+You can download extension from Chrome web store - https://chrome.google.com/webstore/detail/531-planner/aeaclelajhamgcmngdjlnpjjkggbcbbh 
 or just by downloading "531 Chrome extension.crx" file from repository and dragging it into your chrome://extensions window.
 
 Disclaimer:
