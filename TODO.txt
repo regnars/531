@@ -1,0 +1,5 @@
+Turning of plate and bar denominations.
+
+Specialty bars
+  - option: Use different bars on main lifts.
+  - option: Use standard olympic bar on all main lifts.
